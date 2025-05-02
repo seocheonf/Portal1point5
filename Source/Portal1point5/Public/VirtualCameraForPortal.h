@@ -35,7 +35,7 @@ private:
 	class APortal* RenderingPortal;
 	class APortal* LinkedPortal;
 
-
+	class UTextureRenderTarget2D* RenderTarget;
 	
 	//함수
 private:
@@ -51,17 +51,26 @@ private:
 	
 	//본인 위치와 회전을 플레이어 카메라, 관리 포탈 등을 기반으로 갱신
 	//매개변수로 주어진 카메라와 가상 카메라의 관리 포탈 사이의 상대 좌표 계산 및 가상 카메라 이동
-	void TransformFromTargetCamera(UCameraComponent* targetCamera);
+	void TransformFromTargetCamera(class UCameraComponent* targetCamera);
 
 	//Clip Plane 설정
 	void SetClipPlane(FVector normal, FVector location);
 
+	//카메라 동기화
+	void Synchronization(class UCameraComponent* targetCamera);
+
 public:
 
 	//관리 포탈 설정 
-	void SetPortal(APortal* renderingPortal, APortal* linkedPortal);
+	void SetPortal(class APortal* renderingPortal, class APortal* linkedPortal);
 
+	//렌더 타겟 사이즈 조정
+	void SetRenderTargetSize(int x, int y);
+
+	//커스텀 초기화
+	void SetVirtualCameraForPortal(APortal* renderingPortal, APortal* linkedPortal, int renderTargetSizeX, int renderTargetSizeY);
+	
 	//타겟 카메라 기반, 가상 카메라 업데이트
-	void UpdateVirtualCamera(UCameraComponent* targetCamera);
+	void UpdateVirtualCamera(class UCameraComponent* targetCamera);
 	
 };

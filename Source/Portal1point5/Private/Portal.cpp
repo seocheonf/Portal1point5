@@ -10,8 +10,8 @@ APortal::APortal()
 	PrimaryActorTick.bCanEverTick = true;
 
 	
-	GenerateComponent();
-	InitComponent();
+	ConstructionGenerateComponent();
+	ConstructionInitComponent();
 
 
 	

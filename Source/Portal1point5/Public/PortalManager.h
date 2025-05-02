@@ -28,21 +28,26 @@ public:
 private:
 
 	class USceneComponent* baseComp;
-	
+
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<class APortal> OriginOrangePortal;
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<class APortal> OriginBluePortal;
-	
 	class APortal* OrangePortal;
 	class APortal* BluePortal;
 
 	class AVirtualCameraForPortal* OrangeVirtualCamera;
 	class AVirtualCameraForPortal* BlueVirtualCamera;
 
+	class UCameraComponent* ManagedCamera;
 
 	//함수
 private:
 	//CustomBeginPlay
 	void CustomBeginPlay();
+
+public:
+	void SetManagedCamera(class UCameraComponent* managedCamera);
 
 	
 	

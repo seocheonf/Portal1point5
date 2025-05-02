@@ -26,4 +26,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	//멤버변수
+public:
+	UPROPERTY(EditAnywhere)
+	class UCameraComponent* PlayerCameraComp;
+	
 };
