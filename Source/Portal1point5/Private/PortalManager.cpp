@@ -116,25 +116,21 @@ void APortalManager::PutPortal(APortal* targetPortal, const AActor* instigator, 
 	}
 
 	FVector targetForwardVector = hit.ImpactNormal;
-		UE_LOG(LogTemp, Error, TEXT("%f"), hit.ImpactNormal.X);
-		UE_LOG(LogTemp, Error, TEXT("%f"), hit.ImpactNormal.Y);
 	FVector targetUpVector;
 	//XY 평면 확인
 	if (FMathf::Abs(hit.ImpactNormal.X) < 0.0001f && FMathf::Abs(hit.ImpactNormal.Y) < 0.0001f)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Test1"));
 		targetUpVector = CustomUnrealExtention::OrthographicProjection(direction, hit.ImpactNormal);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Test2"));
 		targetUpVector = CustomUnrealExtention::OrthographicProjection(FVector::UpVector, hit.ImpactNormal);
 	}
 
 	FRotator rot = UKismetMathLibrary::MakeRotFromXZ(targetForwardVector, targetUpVector);
 
 	//z fighting problem temporary solving
-	targetPortal->SetActorLocation(hit.ImpactPoint + hit.ImpactNormal*0.001f);
+	targetPortal->SetActorLocation(hit.ImpactPoint + hit.ImpactNormal*0.1f);
 	targetPortal->SetActorRotation(rot);
 }
 
@@ -145,8 +141,8 @@ void APortalManager::SetManagedCamera(class UCameraComponent* managedCamera)
 
 void APortalManager::SetPortal()
 {
-	OrangePortal->SetPortal(OrangeRenderTarget);
-	BluePortal->SetPortal(BlueRenderTarget);
+	OrangePortal->SetPortal(OrangeRenderTarget, BluePortal);
+	BluePortal->SetPortal(BlueRenderTarget, OrangePortal);
 }
 
 void APortalManager::SetVirtualCamera()

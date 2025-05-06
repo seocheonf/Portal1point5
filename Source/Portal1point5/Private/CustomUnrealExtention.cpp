@@ -50,6 +50,19 @@ FRotator CustomUnrealExtention::TransformRelativeRotation(const FTransform& newT
 	return realRotation;
 }
 
+FVector CustomUnrealExtention::TransformRelativeDirection(const FTransform& newTransform,
+	const FTransform& baseTransform, const FVector& targetWorldDirection)
+{
+	//주어진 Transform을 기반으로 하는 현재 방향의 local direction을 구한다.
+	FVector baseLocalDirection = UKismetMathLibrary::InverseTransformDirection(baseTransform, targetWorldDirection);
+
+	//이 local direction을 새로운 Transform을 기반으로 하는 world direction을 구한다.
+	FVector realDirection = UKismetMathLibrary::TransformDirection(newTransform, baseLocalDirection);
+
+	return realDirection;
+}
+
+
 FVector CustomUnrealExtention::OrthographicProjection(const FVector& projectionVector, const FVector& normalVector)
 {
 	// 평면을 정의하는 Normal Vecor N과

@@ -4,11 +4,12 @@
 
 #include "InputActionValue.h"
 #include "CoreMinimal.h"
+#include "MovableTarget.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class PORTAL1POINT5_API APlayerCharacter : public ACharacter
+class PORTAL1POINT5_API APlayerCharacter : public ACharacter, public IMovableTarget
 {
 	GENERATED_BODY()
 
@@ -29,6 +30,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//인터페이스 함수
+public:
+	virtual FVector GetVelocity() override;
+	virtual void SetVelocity(FVector newVelocity) override;
+
+	virtual FRotator GetRotation() override;
+	virtual void SetRotation(FRotator newRotation) override;
 
 	//함수
 private:
@@ -57,6 +65,9 @@ private:
 	
 	//이동 방향
 	FVector Direction;
+
+	//이전 속도
+	FVector BeforeVelocity;
 
 	//==포탈 설치==
 	UPROPERTY(EditAnywhere, Category = Input)

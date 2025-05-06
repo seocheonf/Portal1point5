@@ -63,6 +63,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 	AddMovementInput(Direction);
 
 	Direction = FVector::ZeroVector;
+
+	BeforeVelocity = GetCharacterMovement()->Velocity;
 }
 
 // Called to bind functionality to input
@@ -117,3 +119,30 @@ void APlayerCharacter::SetPortalManager(class APortalManager* portalManager)
 {
 	PortalManager = portalManager;
 }
+
+FVector APlayerCharacter::GetVelocity()
+{
+	return BeforeVelocity;
+}
+
+void APlayerCharacter::SetVelocity(FVector newVelocity)
+{
+	GetCharacterMovement()->Velocity = newVelocity;
+}
+
+FRotator APlayerCharacter::GetRotation()
+{
+	return PlayerCameraComp->GetComponentRotation();
+}
+
+void APlayerCharacter::SetRotation(FRotator newRotation)
+{
+	//Controller->SetControlRotation(FRotator(0, 0, 0));
+	Controller->SetControlRotation(FRotator(newRotation.Pitch, newRotation.Yaw, 0.f));
+	
+	// FRotator currentRot = Controller->GetControlRotation();
+	// FRotator addRot = newRotation - currentRot;
+	// AddControllerYawInput(addRot.Yaw);
+	// AddControllerPitchInput(addRot.Pitch);
+}
+
