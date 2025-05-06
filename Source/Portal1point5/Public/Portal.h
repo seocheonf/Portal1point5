@@ -33,6 +33,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* PortalMeshComp;
 
+	class UMaterialInstanceDynamic* PortalMaterial;
+	
+public:
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* OriginPortalMaterial;
 
 
 	//함수
@@ -44,6 +49,8 @@ private:
 	//컴포넌트 정보 초기화
 	void ConstructionInitComponent();
 	
-	
+public:
+
+	void SetPortal(UTextureRenderTarget2D* renderTarget);
 	
 };

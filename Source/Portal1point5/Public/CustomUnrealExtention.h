@@ -20,5 +20,5 @@ public:
 	
 	static FVector TransformRelativeLocation(const FTransform& newTransform, const FTransform& baseTransform, const FVector& targetWorldLocation);
 	static FRotator TransformRelativeRotation(const FTransform& newTransform, const FTransform& baseTransform, const FRotator& targetWorldRotation);
-	
+	static FVector OrthographicProjection(const FVector& projectionVector, const FVector& normalVector);
 };

@@ -48,7 +48,7 @@ void AVirtualCameraForPortal::ConstructionGenerateComponent()
 	//Root의 Transform과는 별개로 Child의 Transform이 변경될 상황을 대비하기 위해 SceneCaptureComponent를 SceneComponent의 하위로 감쌌음.
 	SceneCaptureComp = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("SceneCaptureComp"));
 	SceneCaptureComp->SetupAttachment(BaseComp);
-	
+	SceneCaptureComp->bEnableClipPlane = true;
 	
 }
 
@@ -101,6 +101,7 @@ void AVirtualCameraForPortal::TransformFromTargetCamera(UCameraComponent* target
 	//이 local Forward와 Up에 대해서 각각, 대상의 Transform 기반 Direction을 계산
 	//이 Forward와 Up Direction을 기반으로 회전 계산 (두 축을 바탕으로 (이 기능의 x는 전방, z는 상향이므로 최초 forward와 up을 전방, 상향에서 가져온 것을 대입하면 됨) 정확한 방향 설정)
 	FRotator realRotation = CustomUnrealExtention::TransformRelativeRotation(LinkedPortal->GetActorTransform(), baseTransform, targetCameraComp->GetComponentRotation());
+	
 	//이 world rotation을 본인의 방향으로 설정. (이 회전은 Root가 해야 함)
 	SetActorRotation(realRotation);
 	
@@ -129,9 +130,11 @@ void AVirtualCameraForPortal::SetRenderTargetSize(int x, int y)
 	RenderTarget->SizeY = y;
 }
 
-void AVirtualCameraForPortal::SetVirtualCameraForPortal(APortal* renderingPortal, APortal* linkedPortal, int renderTargetSizeX, int renderTargetSizeY)
+void AVirtualCameraForPortal::SetVirtualCameraForPortal(UTextureRenderTarget2D* renderTarget, APortal* renderingPortal, APortal* linkedPortal, int renderTargetSizeX, int renderTargetSizeY)
 {
 	SetPortal(renderingPortal, linkedPortal);
+	SceneCaptureComp->TextureTarget = renderTarget;
+	RenderTarget = renderTarget;
 	SetRenderTargetSize(renderTargetSizeX, renderTargetSizeY);
 }
 

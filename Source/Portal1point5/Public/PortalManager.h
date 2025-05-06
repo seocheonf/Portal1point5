@@ -41,14 +41,24 @@ private:
 
 	class UCameraComponent* ManagedCamera;
 
+	UPROPERTY(VisibleAnywhere)
+	class UTextureRenderTarget2D* OrangeRenderTarget;
+	UPROPERTY(VisibleAnywhere)
+	class UTextureRenderTarget2D* BlueRenderTarget;
+	
+	
 	//함수
 private:
 	//CustomBeginPlay
 	void CustomBeginPlay();
+	void PutPortal(APortal* targetPortal, const AActor* instigator, const FVector& startPoint, const FVector& direction);
 
 public:
 	void SetManagedCamera(class UCameraComponent* managedCamera);
 
-	
-	
+	void SetPortal();
+	void SetVirtualCamera();
+
+	void PutOrangePortal(const AActor* instigator, const FVector& startPoint, const FVector& direction);
+	void PutBluePortal(const AActor* instigator, const FVector& startPoint, const FVector& direction);
 };

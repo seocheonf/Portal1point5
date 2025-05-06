@@ -3,6 +3,8 @@
 
 #include "Portal.h"
 
+#include "Engine/TextureRenderTarget2D.h"
+
 // Sets default values
 APortal::APortal()
 {
@@ -40,8 +42,6 @@ void APortal::ConstructionGenerateComponent()
 
 	PortalMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PortalComp"));
 	PortalMeshComp->SetupAttachment(BaseComp);
-	
-	
 }
 
 void APortal::ConstructionInitComponent()
@@ -53,7 +53,14 @@ void APortal::ConstructionInitComponent()
 		PortalMeshComp->SetStaticMesh(temptPortalMesh.Object);
 	}
 	PortalMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
-	
-	
+	PortalMeshComp->SetMaterial(0, nullptr);
+}
+
+void APortal::SetPortal(UTextureRenderTarget2D* renderTarget)
+{
+
+	PortalMaterial = PortalMeshComp->CreateDynamicMaterialInstance(0, OriginPortalMaterial);
+	PortalMaterial->SetTextureParameterValue(FName("RenderTarget"), renderTarget);
+
 }
 

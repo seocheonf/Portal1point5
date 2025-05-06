@@ -35,6 +35,7 @@ private:
 	class APortal* RenderingPortal;
 	class APortal* LinkedPortal;
 
+	UPROPERTY(VisibleAnywhere)
 	class UTextureRenderTarget2D* RenderTarget;
 	
 	//함수
@@ -59,16 +60,16 @@ private:
 	//카메라 동기화
 	void Synchronization(class UCameraComponent* targetCamera);
 
-public:
-
 	//관리 포탈 설정 
 	void SetPortal(class APortal* renderingPortal, class APortal* linkedPortal);
+	
+public:
 
 	//렌더 타겟 사이즈 조정
 	void SetRenderTargetSize(int x, int y);
 
 	//커스텀 초기화
-	void SetVirtualCameraForPortal(APortal* renderingPortal, APortal* linkedPortal, int renderTargetSizeX, int renderTargetSizeY);
+	void SetVirtualCameraForPortal(UTextureRenderTarget2D* renderTarget, APortal* renderingPortal, APortal* linkedPortal, int renderTargetSizeX, int renderTargetSizeY);
 	
 	//타겟 카메라 기반, 가상 카메라 업데이트
 	void UpdateVirtualCamera(class UCameraComponent* targetCamera);

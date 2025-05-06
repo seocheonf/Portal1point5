@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "InputActionValue.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
@@ -19,6 +20,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void NotifyControllerChanged() override;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -27,9 +30,49 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	//함수
+private:
+	//==이동 액션 함수==
+	void OnActionMove(const FInputActionValue& value);
+	void OnActionLook(const FInputActionValue& value);
+	void OnActionJump(const FInputActionValue& value);
+	//==포탈 액션 함수==
+	void OnActionShootBluePortal(const FInputActionValue& value);
+	void OnActionShootOrangePortal(const FInputActionValue& value);
 	//멤버변수
+private:
+
+	//==이동 관련==
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputMappingContext* IMC_PlayerCharacter;
+	
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* IA_Look;
+	
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* IA_Move;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* IA_Jump;
+	
+	//이동 방향
+	FVector Direction;
+
+	//==포탈 설치==
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* IA_ShootBluePortal;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	class UInputAction* IA_ShootOrangePortal;
+	
+	class APortalManager* PortalManager;
+	
 public:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* PlayerCameraComp;
+
+	//함수
+public:
+	void SetPortalManager(class APortalManager* portalManager);
 	
 };
