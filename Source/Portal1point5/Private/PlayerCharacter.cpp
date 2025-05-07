@@ -65,6 +65,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Direction = FVector::ZeroVector;
 
 	BeforeVelocity = GetCharacterMovement()->Velocity;
+
 }
 
 // Called to bind functionality to input
@@ -82,6 +83,47 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		input->BindAction(IA_ShootBluePortal, ETriggerEvent::Started, this, &APlayerCharacter::OnActionShootBluePortal);
 		input->BindAction(IA_ShootOrangePortal, ETriggerEvent::Started, this, &APlayerCharacter::OnActionShootOrangePortal);
 	}
+}
+
+FVector APlayerCharacter::GetLocation()
+{
+	return GetActorLocation();
+}
+
+void APlayerCharacter::SetLocation(FVector newLocation)
+{
+	SetActorLocation(newLocation);
+}
+
+FVector APlayerCharacter::GetVelocity()
+{
+	return BeforeVelocity;
+}
+
+void APlayerCharacter::SetVelocity(FVector newVelocity)
+{
+	//내부 가속 문제 있을 것 같았는데 그랬음.
+	//GetCharacterMovement()->Launch(newVelocity);
+	//충돌 시 곧바로 값을 바꾸지만, 다음 프레임에 속도가 0이 되어버림. 이전 충돌로 인한 감속이 반영되는 것 같음.
+	//GetCharacterMovement()->Velocity = newVelocity;
+	GetCharacterMovement()->Velocity = newVelocity;
+	GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+}
+
+FRotator APlayerCharacter::GetRotation()
+{
+	return PlayerCameraComp->GetComponentRotation();
+}
+
+void APlayerCharacter::SetRotation(FRotator newRotation)
+{
+	//Controller->SetControlRotation(FRotator(0, 0, 0));
+	Controller->SetControlRotation(FRotator(newRotation.Pitch, newRotation.Yaw, 0.f));
+	
+	// FRotator currentRot = Controller->GetControlRotation();
+	// FRotator addRot = newRotation - currentRot;
+	// AddControllerYawInput(addRot.Yaw);
+	// AddControllerPitchInput(addRot.Pitch);
 }
 
 void APlayerCharacter::OnActionMove(const FInputActionValue& value)
@@ -119,30 +161,3 @@ void APlayerCharacter::SetPortalManager(class APortalManager* portalManager)
 {
 	PortalManager = portalManager;
 }
-
-FVector APlayerCharacter::GetVelocity()
-{
-	return BeforeVelocity;
-}
-
-void APlayerCharacter::SetVelocity(FVector newVelocity)
-{
-	GetCharacterMovement()->Velocity = newVelocity;
-}
-
-FRotator APlayerCharacter::GetRotation()
-{
-	return PlayerCameraComp->GetComponentRotation();
-}
-
-void APlayerCharacter::SetRotation(FRotator newRotation)
-{
-	//Controller->SetControlRotation(FRotator(0, 0, 0));
-	Controller->SetControlRotation(FRotator(newRotation.Pitch, newRotation.Yaw, 0.f));
-	
-	// FRotator currentRot = Controller->GetControlRotation();
-	// FRotator addRot = newRotation - currentRot;
-	// AddControllerYawInput(addRot.Yaw);
-	// AddControllerPitchInput(addRot.Pitch);
-}
-

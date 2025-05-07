@@ -32,6 +32,9 @@ public:
 
 	//인터페이스 함수
 public:
+	virtual FVector GetLocation() override;
+	virtual void SetLocation(FVector newLocation) override;
+	
 	virtual FVector GetVelocity() override;
 	virtual void SetVelocity(FVector newVelocity) override;
 

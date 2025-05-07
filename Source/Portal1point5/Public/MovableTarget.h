@@ -23,10 +23,12 @@ class PORTAL1POINT5_API IMovableTarget
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
+	virtual FVector GetLocation() = 0;
+	virtual void SetLocation(FVector newLocation) = 0;
+
 	virtual FVector GetVelocity() = 0;
 	virtual void SetVelocity(FVector newVelocity) = 0;
 	
 	virtual FRotator GetRotation() = 0;
 	virtual void SetRotation(FRotator newRotation) = 0;
-
 };

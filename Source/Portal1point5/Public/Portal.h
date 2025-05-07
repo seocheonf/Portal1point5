@@ -31,11 +31,18 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* BaseComp;
 	UPROPERTY(EditAnywhere)
+	class UBoxComponent* PortalBoxComp;
+	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* PortalMeshComp;
+	
 
 	class UMaterialInstanceDynamic* PortalMaterial;
 
 	class APortal* LinkedPortal;
+
+	//이전 충돌 정보
+	int32 BeforeHitFrameNumber;
+	void* BeforeHitActor;
 	
 public:
 	UPROPERTY(EditAnywhere)

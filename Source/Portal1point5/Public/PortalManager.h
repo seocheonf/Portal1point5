@@ -52,7 +52,8 @@ private:
 	//CustomBeginPlay
 	void CustomBeginPlay();
 	void PutPortal(APortal* targetPortal, const AActor* instigator, const FVector& startPoint, const FVector& direction);
-
+	void GenerateRenderTarget();
+	
 public:
 	void SetManagedCamera(class UCameraComponent* managedCamera);
 

@@ -10,6 +10,7 @@
 #include "Portal.h"
 #include "VirtualCameraForPortal.h"
 #include "Engine/TextureRenderTarget2D.h"
+#include "GameFramework/GameUserSettings.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -87,11 +88,28 @@ void APortalManager::CustomBeginPlay()
 	//포탈용 렌더타겟 생성
 	//OrangeRenderTarget = NewObject<UTextureRenderTarget2D>();
 	//BlueRenderTarget = NewObject<UTextureRenderTarget2D>();
+	//GenerateRenderTarget();
 	
 	SetPortal();
 	
 	SetVirtualCamera();
 
+	// if (!BlueRenderTarget)
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("RenderTarget is nullptr"));
+	// }
+	// else if (!BlueRenderTarget->GetResource())
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("RenderTarget->Resource is nullptr"));
+	// }
+	// else if (!BlueRenderTarget->GetResource->())
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("RenderTarget->TextureRHI is not valid"));
+	// }
+	// else
+	// {
+	// 	UE_LOG(LogTemp, Warning, TEXT("RenderTarget is valid and ready!"));
+	// }
 }
 
 void APortalManager::PutPortal(APortal* targetPortal, const AActor* instigator, const FVector& startPoint, const FVector& direction)
@@ -133,6 +151,23 @@ void APortalManager::PutPortal(APortal* targetPortal, const AActor* instigator, 
 	targetPortal->SetActorLocation(hit.ImpactPoint + hit.ImpactNormal*0.1f);
 	targetPortal->SetActorRotation(rot);
 }
+//gpt 복붙임. 테스트 용으로 썼던 것.
+void APortalManager::GenerateRenderTarget()
+{
+	BlueRenderTarget = NewObject<UTextureRenderTarget2D>(this);
+	BlueRenderTarget->InitAutoFormat(1024, 1024);
+	BlueRenderTarget->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
+	BlueRenderTarget->ClearColor = FLinearColor::Black;
+	BlueRenderTarget->UpdateResourceImmediate(true);
+	BlueRenderTarget->AddToRoot();
+
+	OrangeRenderTarget = NewObject<UTextureRenderTarget2D>(this);
+	OrangeRenderTarget->InitAutoFormat(1024, 1024);
+	OrangeRenderTarget->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA16f;
+	OrangeRenderTarget->ClearColor = FLinearColor::Black;
+	OrangeRenderTarget->UpdateResourceImmediate(true);
+	OrangeRenderTarget->AddToRoot();
+}
 
 void APortalManager::SetManagedCamera(class UCameraComponent* managedCamera)
 {
@@ -148,12 +183,16 @@ void APortalManager::SetPortal()
 void APortalManager::SetVirtualCamera()
 {
 	//카메라 초기화
-	int viewPortX = 0;
-	int viewPortY = 0;
-	GetWorld()->GetFirstPlayerController()->GetViewportSize(viewPortX, viewPortY);
+	int resolutionX = 0;
+	int resolutionY = 0;
 	
-	OrangeVirtualCamera->SetVirtualCameraForPortal(OrangeRenderTarget, OrangePortal, BluePortal, viewPortX, viewPortY);
-	BlueVirtualCamera->SetVirtualCameraForPortal(BlueRenderTarget, BluePortal, OrangePortal, viewPortX, viewPortY);
+	//GetWorld()->GetFirstPlayerController()->GetViewportSize(viewPortX, viewPortY);
+	FIntPoint resolution = UGameUserSettings::GetGameUserSettings()->GetScreenResolution();
+	resolutionX = resolution.X;
+	resolutionY = resolution.Y;
+	
+	OrangeVirtualCamera->SetVirtualCameraForPortal(OrangeRenderTarget, OrangePortal, BluePortal, resolutionX, resolutionY);
+	BlueVirtualCamera->SetVirtualCameraForPortal(BlueRenderTarget, BluePortal, OrangePortal, resolutionX, resolutionY);
 }
 
 void APortalManager::PutOrangePortal(const AActor* instigator, const FVector& startPoint, const FVector& direction)
