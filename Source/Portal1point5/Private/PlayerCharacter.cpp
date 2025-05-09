@@ -8,6 +8,7 @@
 #include "PortalManager.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -25,7 +26,8 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	PlayerCameraComp->bUsePawnControlRotation = true;
-	
+
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerCharacter"));
 	
 }
 

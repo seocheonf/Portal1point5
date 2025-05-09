@@ -4,12 +4,13 @@
 
 #include "InputActionValue.h"
 #include "CoreMinimal.h"
+#include "GelEffectTarget.h"
 #include "MovableTarget.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class PORTAL1POINT5_API APlayerCharacter : public ACharacter, public IMovableTarget
+class PORTAL1POINT5_API APlayerCharacter : public ACharacter, public IMovableTarget, public IGelEffectTarget
 {
 	GENERATED_BODY()
 
@@ -32,6 +33,8 @@ public:
 
 	//인터페이스 함수
 public:
+	//IMovableTarget
+	
 	virtual FVector GetLocation() override;
 	virtual void SetLocation(FVector newLocation) override;
 	
@@ -41,15 +44,10 @@ public:
 	virtual FRotator GetRotation() override;
 	virtual void SetRotation(FRotator newRotation) override;
 
-	//함수
-private:
-	//==이동 액션 함수==
-	void OnActionMove(const FInputActionValue& value);
-	void OnActionLook(const FInputActionValue& value);
-	void OnActionJump(const FInputActionValue& value);
-	//==포탈 액션 함수==
-	void OnActionShootBluePortal(const FInputActionValue& value);
-	void OnActionShootOrangePortal(const FInputActionValue& value);
+	//IGelEffectTarget
+	
+
+	
 	//멤버변수
 private:
 
@@ -86,7 +84,17 @@ public:
 	class UCameraComponent* PlayerCameraComp;
 
 	//함수
+private:
+	//==이동 액션 함수==
+	void OnActionMove(const FInputActionValue& value);
+	void OnActionLook(const FInputActionValue& value);
+	void OnActionJump(const FInputActionValue& value);
+	//==포탈 액션 함수==
+	void OnActionShootBluePortal(const FInputActionValue& value);
+	void OnActionShootOrangePortal(const FInputActionValue& value);
+	
 public:
 	void SetPortalManager(class APortalManager* portalManager);
+	
 	
 };

@@ -3,18 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PortableSurface.h"
 #include "GameFramework/Actor.h"
-#include "MyActor.generated.h"
+#include "GelEffectArea.generated.h"
 
 UCLASS()
-class PORTAL1POINT5_API AMyActor : public AActor, public IPortableSurface
+class PORTAL1POINT5_API AGelEffectArea : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyActor();
+	AGelEffectArea();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,18 +21,6 @@ protected:
 
 public:	
 	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
-
-
-	//멤버변수
-private:
-	
-	//UPROPERTY(EditAnywhere)
-	//bool bPutPortal = false;
-
-	//함수
-public:
-
-	//bool GetPutablePortal();
+	virtual void Tick(float DeltaTime) override;
 
 };
