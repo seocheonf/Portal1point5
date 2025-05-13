@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CustomEnum.h"
 #include "UObject/Interface.h"
-#include "PortableSurface.generated.h"
+#include "GelPaintTarget.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UPortableSurface : public UInterface
+class UGelPaintTarget : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,12 +17,12 @@ class UPortableSurface : public UInterface
 /**
  * 
  */
-class PORTAL1POINT5_API IPortableSurface
+class PORTAL1POINT5_API IGelPaintTarget
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	virtual bool GetPortable() = 0;
+	virtual void PaintGel(GelStatus paintingGel) = 0;
 };

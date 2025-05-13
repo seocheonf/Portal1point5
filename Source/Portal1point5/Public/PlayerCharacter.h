@@ -45,8 +45,10 @@ public:
 	virtual void SetRotation(FRotator newRotation) override;
 
 	//IGelEffectTarget
-	
 
+	virtual void GetMovementInfo(GelEffectInfo& outInfo) override;
+	virtual void SetMovementInfo(const GelEffectInfo& newInfo) override;
+	virtual void GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo) override;
 	
 	//멤버변수
 private:
@@ -78,6 +80,11 @@ private:
 	class UInputAction* IA_ShootOrangePortal;
 	
 	class APortalManager* PortalManager;
+
+	//default 정보
+	float DefaultAcceleration;
+	float DefaultMoveSpeed;
+	float DefaultJumpPower;
 	
 public:
 	UPROPERTY(EditAnywhere)
@@ -92,7 +99,8 @@ private:
 	//==포탈 액션 함수==
 	void OnActionShootBluePortal(const FInputActionValue& value);
 	void OnActionShootOrangePortal(const FInputActionValue& value);
-	
+	//==커스텀 비긴 플레이==
+	void CustomBeginPlay();
 public:
 	void SetPortalManager(class APortalManager* portalManager);
 	

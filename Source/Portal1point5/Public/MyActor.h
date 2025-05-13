@@ -34,6 +34,6 @@ private:
 	//함수
 public:
 
-	//bool GetPutablePortal();
+	virtual bool GetPortable() override;
 
 };

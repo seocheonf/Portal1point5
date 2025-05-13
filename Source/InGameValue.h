@@ -1,0 +1,1 @@
+#define WALKABLE_SLOPE_DEGREE 50.f

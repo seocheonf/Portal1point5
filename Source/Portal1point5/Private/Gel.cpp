@@ -3,6 +3,7 @@
 
 #include "Gel.h"
 
+#include "GelPaintTarget.h"
 #include "GelProjectileMovementComponent.h"
 #include "Portal.h"
 #include "Components/SphereComponent.h"
@@ -107,6 +108,14 @@ void AGel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	if (nullptr != Cast<APortal>(OtherActor))
 		return;
 
-	//임시
+	IGelPaintTarget* target = Cast<IGelPaintTarget>(OtherActor);
+
+	//만약 타겟이 젤이 그려지는 대상이라면
+	if (nullptr != target)
+	{
+		target->PaintGel()
+	
+	}
+	
 	Destroy();
 }

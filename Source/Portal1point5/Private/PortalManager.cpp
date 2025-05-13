@@ -121,17 +121,12 @@ void APortalManager::PutPortal(APortal* targetPortal, const AActor* instigator, 
 	//ECC_GameTraceChannel1 => PortalTrace TraceChannel
 	GetWorld()->LineTraceSingleByChannel(hit, startPoint, endPoint, ECollisionChannel::ECC_GameTraceChannel1, traceColParam);
 
-	void* hitActor = Cast<IPortableSurface>(hit.GetActor());
-	if (nullptr == hitActor)
+	IPortableSurface* hitSurface = Cast<IPortableSurface>(hit.GetActor());
+	if ((nullptr == hitSurface) || (!hitSurface->GetPortable()))
 	{
 		//미감지
 		return;
 	}
-	// if (!hitActor->GetPutablePortal())
-	// {
-	// 	//설치불가
-	// 	return;
-	// }
 
 	FVector targetForwardVector = hit.ImpactNormal;
 	FVector targetUpVector;

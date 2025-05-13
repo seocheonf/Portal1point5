@@ -5,10 +5,12 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "InGameValue.h"
 #include "PortalManager.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Framework/Docking/LayoutExtender.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -36,7 +38,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	
+	CustomBeginPlay();
 }
 
 void APlayerCharacter::NotifyControllerChanged()
@@ -128,6 +130,29 @@ void APlayerCharacter::SetRotation(FRotator newRotation)
 	// AddControllerPitchInput(addRot.Pitch);
 }
 
+void APlayerCharacter::GetMovementInfo(GelEffectInfo& outInfo)
+{
+	outInfo.targetVelocity = BeforeVelocity;
+	outInfo.targetAcceleration = GetCharacterMovement()->MaxAcceleration();
+	outInfo.targetMoveSpeed = GetCharacterMovement()->MaxWalkSpeed();
+	outInfo.targetJumpPower = GetCharacterMovement()->JumpZVelocity;
+}
+
+void APlayerCharacter::SetMovementInfo(const GelEffectInfo& newInfo)
+{
+	SetVelocity(newInfo.targetVelocity);
+	GetCharacterMovement()->MaxAcceleration = newInfo.targetAcceleration;
+	GetCharacterMovement()->MaxWalkSpeed = newInfo.targetMoveSpeed;
+	GetCharacterMovement()->JumpZVelocity = newInfo.targetJumpPower;
+}
+
+void APlayerCharacter::GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo)
+{
+	outOriginInfo.originAcceleration = DefaultAcceleration;
+	outOriginInfo.originMoveSpeed = DefaultMoveSpeed;
+	outOriginInfo.originJumpPower = DefaultJumpPower;
+}
+
 void APlayerCharacter::OnActionMove(const FInputActionValue& value)
 {
 	FVector2D v = value.Get<FVector2D>();
@@ -157,6 +182,15 @@ void APlayerCharacter::OnActionShootBluePortal(const FInputActionValue& value)
 void APlayerCharacter::OnActionShootOrangePortal(const FInputActionValue& value)
 {
 	PortalManager->PutOrangePortal(this, PlayerCameraComp->GetComponentLocation(), PlayerCameraComp->GetForwardVector());
+}
+
+void APlayerCharacter::CustomBeginPlay()
+{
+	DefaultAcceleration = GetCharacterMovement()->MaxAcceleration;
+	DefaultMoveSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	DefaultJumpPower = GetCharacterMovement()->JumpZVelocity;
+
+	GetCharacterMovement()->SetWalkableFloorAngle(WALKABLE_SLOPE_DEGREE);
 }
 
 void APlayerCharacter::SetPortalManager(class APortalManager* portalManager)

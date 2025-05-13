@@ -16,11 +16,34 @@ class UGelEffectTarget : public UInterface
 /**
  * 
  */
+
+class GelEffectInfo
+{
+public:
+	FVector targetVelocity = FVector::Zero();
+	float targetAcceleration = 0.0f;
+	float targetMoveSpeed = 0.0f;
+	float targetJumpPower = 0.0f;
+	float targetFriction = 0.0f;
+};
+
+class OriginGelEffectInfo
+{
+public:
+	float originAcceleration = 0.0f;
+	float originMoveSpeed = 0.0f;
+	float originJumpPower = 0.0f;
+	float originFriction = 0.0f;
+};
+
 class PORTAL1POINT5_API IGelEffectTarget
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	virtual void GetMovementInfo(GelEffectInfo& outInfo) = 0;
+	virtual void SetMovementInfo(const GelEffectInfo& newInfo) = 0;
+	virtual void GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo) = 0;
 	
 };

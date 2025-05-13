@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CustomEnum.h"
 #include "MovableTarget.h"
 #include "GameFramework/Actor.h"
 #include "Gel.generated.h"
@@ -49,6 +50,9 @@ private:
 
 	//이전 속도
 	FVector BeforeVelocity;
+
+	UPROPERTY(EditAnywhere)
+	GelStatus GelState = GelStatus::Cleaning;
 	
 //함수
 private:

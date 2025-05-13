@@ -18,6 +18,11 @@ void AMyActor::BeginPlay()
 	
 }
 
+bool AMyActor::GetPortable()
+{
+	return true;
+}
+
 
 // Called every frame
 //void AMyActor::Tick(float DeltaTime)
