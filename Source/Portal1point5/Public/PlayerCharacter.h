@@ -46,8 +46,8 @@ public:
 
 	//IGelEffectTarget
 
-	virtual void GetMovementInfo(GelEffectInfo& outInfo) override;
-	virtual void SetMovementInfo(const GelEffectInfo& newInfo) override;
+	virtual void GetMovementInfo(GelEffectInfo& outInfo, FVector& outBeforeFrameVelocity) override;
+	virtual void SetMovementInfo(const GelEffectInfo& newInfo, const bool bRefelction = false) override;
 	virtual void GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo) override;
 	
 	//멤버변수

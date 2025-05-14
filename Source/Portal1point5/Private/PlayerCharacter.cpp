@@ -130,17 +130,28 @@ void APlayerCharacter::SetRotation(FRotator newRotation)
 	// AddControllerPitchInput(addRot.Pitch);
 }
 
-void APlayerCharacter::GetMovementInfo(GelEffectInfo& outInfo)
+void APlayerCharacter::GetMovementInfo(GelEffectInfo& outInfo, FVector& outBeforeFrameVelocity)
 {
-	outInfo.targetVelocity = BeforeVelocity;
-	outInfo.targetAcceleration = GetCharacterMovement()->MaxAcceleration();
-	outInfo.targetMoveSpeed = GetCharacterMovement()->MaxWalkSpeed();
+
+	outBeforeFrameVelocity = BeforeVelocity;
+	outInfo.targetVelocity = GetCharacterMovement()->Velocity;
+	outInfo.targetAcceleration = GetCharacterMovement()->MaxAcceleration;
+	outInfo.targetMoveSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	outInfo.targetJumpPower = GetCharacterMovement()->JumpZVelocity;
 }
 
-void APlayerCharacter::SetMovementInfo(const GelEffectInfo& newInfo)
+void APlayerCharacter::SetMovementInfo(const GelEffectInfo& newInfo, const bool bReflection)
 {
-	SetVelocity(newInfo.targetVelocity);
+	//반사로서 적용하고 싶다면
+	if (bReflection)
+	{
+		GetCharacterMovement()->Velocity = newInfo.targetVelocity;
+		GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+	}
+	else
+	{
+		GetCharacterMovement()->Velocity = newInfo.targetVelocity;
+	}
 	GetCharacterMovement()->MaxAcceleration = newInfo.targetAcceleration;
 	GetCharacterMovement()->MaxWalkSpeed = newInfo.targetMoveSpeed;
 	GetCharacterMovement()->JumpZVelocity = newInfo.targetJumpPower;

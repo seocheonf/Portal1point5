@@ -42,8 +42,8 @@ class PORTAL1POINT5_API IGelEffectTarget
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void GetMovementInfo(GelEffectInfo& outInfo) = 0;
-	virtual void SetMovementInfo(const GelEffectInfo& newInfo) = 0;
+	virtual void GetMovementInfo(GelEffectInfo& outInfo, FVector& outBeforeFrameVelocity) = 0;
+	virtual void SetMovementInfo(const GelEffectInfo& newInfo, const bool bReflection = false) = 0;
 	virtual void GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo) = 0;
 	
 };

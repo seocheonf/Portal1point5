@@ -153,7 +153,7 @@ void APortal::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 	BeforeHitActor = OtherActor;
 	
 	UE_LOG(LogTemp, Error, TEXT("Test hit"));
-
+	UE_LOG(LogTemp, Error, TEXT("%s"), *OtherActor->GetName());
 	IMovableTarget* movableTarget = Cast<IMovableTarget>(OtherActor);
 	if (nullptr == movableTarget)
 		return;
@@ -171,9 +171,14 @@ void APortal::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 	//movableTarget->SetLocation(newLocation + LinkedPortal->GetActorForwardVector() * 100.f);
 	//좌우로는 대칭이동해야 해서, 가상 포탈로 가정하여 상대위치 구한 뒤, linked portal의 전방으로 이동하는 식으로 수정함.
 	//forward vector에 평면과의 거리의 2배로 계산하면 됨.
-	FVector newLocation = CustomUnrealExtention::TransformRelativeLocation(LinkedPortal->GetActorTransform(), baseTransform, movableTarget->GetLocation());
-	float distance = FVector::DotProduct(GetActorForwardVector(), movableTarget->GetLocation() - GetActorLocation());
-	newLocation += LinkedPortal->GetActorForwardVector() * distance * 2;
+	
+	//근데 포탈은 통과를 가정하고 있어서, 지금과 같이 충돌 즉시 날려보내는 거는 고려되지 않음.
+	//그래서 벽에 박히니, 임시로 적당히 이동시키기. 95cm정도. 이것도 불안정함. (캡슐 절반 높이, 반지름 활용해서 대각선 값 넣은 거)
+	
+	// FVector newLocation = CustomUnrealExtention::TransformRelativeLocation(LinkedPortal->GetActorTransform(), baseTransform, movableTarget->GetLocation());
+	// float distance = FVector::DotProduct(GetActorForwardVector(), movableTarget->GetLocation() - GetActorLocation());
+	// newLocation += LinkedPortal->GetActorForwardVector() * distance * 2;
+	FVector newLocation = LinkedPortal->GetActorLocation() + LinkedPortal->GetActorForwardVector() * 95.f;
 	movableTarget->SetLocation(newLocation);
 	
 	FRotator newRotation = CustomUnrealExtention::TransformRelativeRotation(LinkedPortal->GetActorTransform(), baseTransform, movableTarget->GetRotation());

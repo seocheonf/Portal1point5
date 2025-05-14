@@ -31,4 +31,5 @@ public:
 	
 	virtual FRotator GetRotation() = 0;
 	virtual void SetRotation(FRotator newRotation) = 0;
+
 };

@@ -45,14 +45,31 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* StaticMeshComp;
 	UPROPERTY(EditAnywhere)
+	class UBoxComponent* FindBoxComp;
+	UPROPERTY(EditAnywhere)
 	class UGelProjectileMovementComponent* GelProjectileMovementComp;
 	//class UProjectileMovementComponent* ProjectileMovementComp;
 
 	//이전 속도
 	FVector BeforeVelocity;
 
+	//충돌 사이즈
+	UPROPERTY(EditAnywhere)
+	FVector GelExplosionExtent = FVector(150.f, 200.f, 200.f);
+
 	UPROPERTY(EditAnywhere)
 	GelStatus GelState = GelStatus::Cleaning;
+
+	//Gel Material
+	
+	UPROPERTY(VisibleAnywhere) //세척
+	class UMaterialInstance* CleaningGelMaterialInstance;
+	UPROPERTY(VisibleAnywhere) //변환
+	class UMaterialInstance* ConversionGelMaterialInstance;
+	UPROPERTY(VisibleAnywhere) //추진
+	class UMaterialInstance* PropulsionGelMaterialInstance;
+	UPROPERTY(VisibleAnywhere) //반발
+	class UMaterialInstance* RepulsionGelMaterialInstance;
 	
 //함수
 private:
@@ -68,5 +85,9 @@ private:
 	//충돌 함수
 	UFUNCTION()
 	void OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+public:
+
+	void SetState(GelStatus newGel);
 	
 };

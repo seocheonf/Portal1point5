@@ -34,6 +34,7 @@ public:
 	//멤버변수
 private:
 	//컴파일 타임 상태 설정
+	UPROPERTY(EditAnywhere)
 	bool bDefaultPutPortal;
 	//..?? 바로 밑의 변수 때문에 딱히 쓰지 않을 듯.
 	GelStatus PlaneGel;
@@ -44,7 +45,14 @@ private:
 	PlaneStatus DefaultPlaneState;
 
 	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* BaseComp;
+	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* PlaneComp;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* HitComp;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* OverlapComp;
+	
 
 	UPROPERTY(VisibleAnywhere) //포탈 설치 불가
 	class UMaterialInstance* NoPortableMaterialInstance;
@@ -68,14 +76,14 @@ private:
 
 	void CustomBeginPlay();
 
-	void SetState(PlaneStatus newPlaneState);
+	void SetState(PlaneStatus newPlaneState, bool bForced = false);
 	void SetState(GelStatus newPlaneGel);
 
 	void ApplyDefautState();
 	void ApplyConversionState();
 	void ApplyPropulsionState();
 	void ApplyRepulsionState();
-
+	
     UFUNCTION()
 	void PropulsionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
