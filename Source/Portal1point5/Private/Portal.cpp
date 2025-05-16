@@ -53,6 +53,9 @@ void APortal::ConstructionGenerateComponent()
 	//PortalMeshComp->SetupAttachment(BaseComp);
 	PortalMeshComp->SetupAttachment(PortalBoxComp);
 
+	PortalBorderMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PortalBorderComp"));
+	PortalBorderMeshComp->SetupAttachment(PortalBoxComp);
+	
 }
 
 void APortal::ConstructionInitComponent()
@@ -62,7 +65,7 @@ void APortal::ConstructionInitComponent()
 	//충돌 반응 On
 	PortalBoxComp->SetNotifyRigidBodyCollision(true);
 	
-	ConstructorHelpers::FObjectFinder<UStaticMesh> temptPortalMesh(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Plane.Plane'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> temptPortalMesh(TEXT("/Script/Engine.StaticMesh'/Game/Portal1point5/Meshes/SM_Portal.SM_Portal'"));
 	if (temptPortalMesh.Succeeded())
 	{
 		PortalMeshComp->SetStaticMesh(temptPortalMesh.Object);
@@ -77,6 +80,19 @@ void APortal::ConstructionInitComponent()
 	//PortalMeshComp->SetNotifyRigidBodyCollision(true);
 	
 	PortalMeshComp->SetMaterial(0, nullptr);
+
+	//==
+	
+	ConstructorHelpers::FObjectFinder<UStaticMesh> temptPortalBorderMesh(TEXT("/Script/Engine.StaticMesh'/Game/Portal1point5/Meshes/SM_PortalBorder.SM_PortalBorder'"));
+
+	if (temptPortalBorderMesh.Succeeded())
+	{
+		PortalBorderMeshComp->SetStaticMesh(temptPortalBorderMesh.Object);
+	}
+
+	PortalBorderMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	
+	PortalBorderMeshComp->SetMaterial(0, nullptr);
 	
 }
 
@@ -190,18 +206,25 @@ void APortal::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 		newDirection.Normalize();
 		newDirection *= 500.f;
 	}
+	//임시 탈출 보정 속도 (비스듬한 접근에서)
+	if (FMath::Abs(FVector::DotProduct(newDirection.GetSafeNormal(), GetActorForwardVector())) < 0.5f)
+	{
+		newDirection += LinkedPortal->GetActorForwardVector() * 500.f;
+	}
 	movableTarget->SetVelocity(newDirection);
 	
 	UE_LOG(LogTemp, Error, TEXT("Test hit End"));
 
 }
 
-void APortal::SetPortal(UTextureRenderTarget2D* renderTarget, APortal* linkedPortal)
+void APortal::SetPortal(UTextureRenderTarget2D* renderTarget, APortal* linkedPortal, UMaterial* borderMaterial)
 {
 
 	PortalMaterial = PortalMeshComp->CreateDynamicMaterialInstance(0, OriginPortalMaterial);
 	PortalMaterial->SetTextureParameterValue(FName("RenderTarget"), renderTarget);
 
+	PortalBorderMeshComp->SetMaterial(0, borderMaterial);
+	
 	LinkedPortal = linkedPortal;
 }
 

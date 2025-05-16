@@ -46,4 +46,7 @@ public:
 	virtual void SetMovementInfo(const GelEffectInfo& newInfo, const bool bReflection = false) = 0;
 	virtual void GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo) = 0;
 	
+	virtual int32 GetEffectCount(const enum class GelEffectType& gelEffectType) = 0;
+	virtual void IncrementEffectCount(const enum class GelEffectType& gelEffectType) = 0;
+	virtual void DecrementEffectCount(const enum class GelEffectType& gelEffectType) = 0;
 };

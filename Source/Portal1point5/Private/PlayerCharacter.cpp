@@ -10,7 +10,6 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Framework/Docking/LayoutExtender.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -164,6 +163,46 @@ void APlayerCharacter::GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo)
 	outOriginInfo.originJumpPower = DefaultJumpPower;
 }
 
+int32 APlayerCharacter::GetEffectCount(const GelEffectType& gelEffectType)
+{
+	if (GelEffectCountMap.Contains(gelEffectType))
+	{
+		return GelEffectCountMap[gelEffectType];
+	}
+	
+	return 0;
+}
+
+void APlayerCharacter::IncrementEffectCount(const GelEffectType& gelEffectType)
+{
+	if (!GelEffectCountMap.Contains(gelEffectType))
+	{
+		GelEffectCountMap.Add(gelEffectType);
+		GelEffectCountMap[gelEffectType] = 1;
+	}
+	else
+	{
+		GelEffectCountMap[gelEffectType]++;
+	}
+}
+
+void APlayerCharacter::DecrementEffectCount(const enum GelEffectType& gelEffectType)
+{
+	if (!GelEffectCountMap.Contains(gelEffectType))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error!!!!! No GelEffect But You Try Decrement!!!!!"))
+		return;
+	}
+
+	if (GelEffectCountMap[gelEffectType] <= 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error!!!!! No GelEffect Count But You Decrement it's count!!!!!"))
+		return;
+	}
+	
+	GelEffectCountMap[gelEffectType]--;
+}
+
 void APlayerCharacter::OnActionMove(const FInputActionValue& value)
 {
 	FVector2D v = value.Get<FVector2D>();
@@ -202,6 +241,8 @@ void APlayerCharacter::CustomBeginPlay()
 	DefaultJumpPower = GetCharacterMovement()->JumpZVelocity;
 
 	GetCharacterMovement()->SetWalkableFloorAngle(WALKABLE_SLOPE_DEGREE);
+
+	
 }
 
 void APlayerCharacter::SetPortalManager(class APortalManager* portalManager)

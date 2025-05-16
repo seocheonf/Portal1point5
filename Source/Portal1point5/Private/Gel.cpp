@@ -36,8 +36,10 @@ void AGel::Tick(float DeltaTime)
 
 	BeforeVelocity = GelProjectileMovementComp->Velocity;
 	//BeforeVelocity = SphereComp->GetPhysicsLinearVelocity();
-	//UE_LOG(LogTemp, Error, TEXT("%f.%f.%f"),ProjectileMovementComp->Velocity.X, ProjectileMovementComp->Velocity.Y, ProjectileMovementComp->Velocity.Z);
-	
+	// if (GelState == GelStatus::Repulsion)
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("CurrentVelocity => %f.%f.%f"),GelProjectileMovementComp->Velocity.X, GelProjectileMovementComp->Velocity.Y, GelProjectileMovementComp->Velocity.Z);
+	// }
 }
 
 FVector AGel::GetLocation()
@@ -52,12 +54,20 @@ void AGel::SetLocation(FVector newLocation)
 
 FVector AGel::GetVelocity()
 {
+	// if (GelState == GelStatus::Repulsion)
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("GetBeforeVelocity==>>==>> %f.%f.%f"),BeforeVelocity.X, BeforeVelocity.Y, BeforeVelocity.Z);
+	// }
 	return BeforeVelocity;
 }
 
 void AGel::SetVelocity(FVector newVelocity)
 {
-	//UE_LOG(LogTemp, Error, TEXT("%f.%f.%f"),ProjectileMovementComp->Velocity.X, ProjectileMovementComp->Velocity.Y, ProjectileMovementComp->Velocity.Z);
+	// if (GelState == GelStatus::Repulsion)
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("GetVelocity==>> %f.%f.%f"),GelProjectileMovementComp->Velocity.X, GelProjectileMovementComp->Velocity.Y, GelProjectileMovementComp->Velocity.Z);
+	// 	UE_LOG(LogTemp, Error, TEXT("newVelocity==>> %f.%f.%f"),newVelocity.X, newVelocity.Y, newVelocity.Z);
+	// }
 	GelProjectileMovementComp->Velocity = newVelocity;
 	//SphereComp->SetPhysicsLinearVelocity(newVelocity);
 }
@@ -134,7 +144,6 @@ void AGel::ConstructionInitComponent()
 void AGel::CustomBeginPlay()
 {
 	SphereComp->OnComponentHit.AddDynamic(this, &AGel::OnComponentHit);
-
 	SetState(GelState);
 }
 
@@ -163,6 +172,11 @@ void AGel::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		//만약 타겟이 젤이 그려지는 대상이라면
 		if (nullptr != target)
 		{
+			if (GelState == GelStatus::Conversion)
+			{
+				GelState = GelStatus::Conversion;
+			}
+			
 			target->PaintGel(GelState);
 		}
 	}

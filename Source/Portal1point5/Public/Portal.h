@@ -34,6 +34,9 @@ private:
 	class UBoxComponent* PortalBoxComp;
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* PortalMeshComp;
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* PortalBorderMeshComp;
+	
 	
 
 	class UMaterialInstanceDynamic* PortalMaterial;
@@ -69,6 +72,6 @@ private:
 	
 public:
 
-	void SetPortal(UTextureRenderTarget2D* renderTarget, APortal* linkedPortal);
+	void SetPortal(UTextureRenderTarget2D* renderTarget, APortal* linkedPortal, UMaterial* borderMaterial);
 	
 };

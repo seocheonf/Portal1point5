@@ -88,6 +88,7 @@ private:
 
 public:
 
+	UFUNCTION(BlueprintCallable)
 	void SetState(GelStatus newGel);
 	
 };

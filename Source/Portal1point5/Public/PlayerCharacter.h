@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "CustomEnum.h"
 #include "InputActionValue.h"
 #include "CoreMinimal.h"
 #include "GelEffectTarget.h"
@@ -49,6 +50,10 @@ public:
 	virtual void GetMovementInfo(GelEffectInfo& outInfo, FVector& outBeforeFrameVelocity) override;
 	virtual void SetMovementInfo(const GelEffectInfo& newInfo, const bool bRefelction = false) override;
 	virtual void GetOriginMovementInfo(OriginGelEffectInfo& outOriginInfo) override;
+
+	virtual int32 GetEffectCount(const enum class GelEffectType& gelEffectType) override;
+	virtual void IncrementEffectCount(const enum class GelEffectType& gelEffectType) override;
+	virtual void DecrementEffectCount(const enum class GelEffectType& gelEffectType) override;
 	
 	//멤버변수
 private:
@@ -85,7 +90,11 @@ private:
 	float DefaultAcceleration;
 	float DefaultMoveSpeed;
 	float DefaultJumpPower;
-	
+
+	//gel effect count 정보
+	UPROPERTY()
+	TMap<GelEffectType, int32> GelEffectCountMap;
+
 public:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* PlayerCameraComp;

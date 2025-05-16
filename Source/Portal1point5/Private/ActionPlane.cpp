@@ -36,7 +36,7 @@ void AActionPlane::Tick(float DeltaTime)
 
 bool AActionPlane::GetPortable()
 {
-	return (bDefaultPutPortal || GelStatus::Cleaning == PlaneGel);
+	return (bDefaultPutPortal || GelStatus::Conversion == PlaneGel);
 }
 
 void AActionPlane::PaintGel(GelStatus paintingGel)
@@ -66,8 +66,8 @@ void AActionPlane::ConstructionInitComponent()
 	PlaneComp->SetWorldScale3D(FVector(0.5f, 0.5f, 1.f));
 	PlaneComp->SetCollisionProfileName(TEXT("NoCollision"));
 
-	HitComp->SetBoxExtent(FVector(25.f, 25.f, 25.f));
-	HitComp->SetRelativeLocation(FVector(-25.f, 0.f, 0.f));
+	HitComp->SetBoxExtent(FVector(2.5f, 25.f, 25.f));
+	HitComp->SetRelativeLocation(FVector(-2.5f, 0.f, 0.f));
 	HitComp->SetCollisionProfileName(TEXT("PortalHit"));
 
 	OverlapComp->SetBoxExtent(FVector(5.f, 25.f, 25.f));
@@ -107,8 +107,6 @@ void AActionPlane::SetState(PlaneStatus newPlaneState, bool bForced)
 {
 	if (!bForced && PlaneState == newPlaneState)
 		return;
-
-	
 	
 	//HitComp->OnComponentHit.RemoveAll(this);
 	OverlapComp->OnComponentBeginOverlap.RemoveAll(this);
@@ -171,6 +169,7 @@ void AActionPlane::ApplyDefautState()
 void AActionPlane::ApplyConversionState()
 {
 	PlaneComp->SetMaterial(0, ConversionGelMaterialInstance);
+	
 }
 
 void AActionPlane::ApplyPropulsionState()
@@ -195,6 +194,18 @@ void AActionPlane::PropulsionBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	IGelEffectTarget* target = ConvertActorToGelEffectTarget(OtherActor);
 	if (nullptr == target)
 		return;
+
+	target->IncrementEffectCount(GelEffectType::SpeedUp);
+	int effectCount = target->GetEffectCount(GelEffectType::SpeedUp);
+	if (effectCount > 1)
+	{
+		return;
+	}
+	if (effectCount < 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error!!!!! Invalid Count!"))
+		return;
+	}
 	
 	UE_LOG(LogTemp, Error, TEXT("Propulsion"));
 	UE_LOG(LogTemp, Error, TEXT("%s"), *OtherActor->GetName());
@@ -211,9 +222,9 @@ void AActionPlane::PropulsionBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	FVector empty = FVector::ZeroVector;
 	target->GetMovementInfo(targetInfo, empty);
 
-	targetInfo.targetAcceleration *= 2.f;
-	targetInfo.targetMoveSpeed *= 2.f;
-	targetInfo.targetFriction /= 2.f;
+	targetInfo.targetAcceleration *= 2.5f;
+	targetInfo.targetMoveSpeed *= 2.5f;
+	targetInfo.targetFriction /= 2.5f;
 
 	target->SetMovementInfo(targetInfo);
 }
@@ -225,6 +236,18 @@ void AActionPlane::PropulsionEndOverlap(UPrimitiveComponent* OverlappedComponent
 	IGelEffectTarget* target = ConvertActorToGelEffectTarget(OtherActor);
 	if (nullptr == target)
 		return;
+
+	target->DecrementEffectCount(GelEffectType::SpeedUp);
+	int effectCount = target->GetEffectCount(GelEffectType::SpeedUp);
+	if (effectCount > 0)
+	{
+		return;
+	}
+	if (effectCount < 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error!!!!! Invalid Count!"))
+		return;
+	}
 
 	UE_LOG(LogTemp, Error, TEXT("PropulsionEnd"));
 	UE_LOG(LogTemp, Error, TEXT("%s"), *OtherActor->GetName());
@@ -248,6 +271,18 @@ void AActionPlane::RepulsionBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	IGelEffectTarget* target = ConvertActorToGelEffectTarget(OtherActor);
 	if (nullptr == target)
 		return;
+
+	target->IncrementEffectCount(GelEffectType::JumpUp);
+	int effectCount = target->GetEffectCount(GelEffectType::JumpUp);
+	if (effectCount > 1)
+	{
+		return;
+	}
+	if (effectCount < 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error!!!!! Invalid Count!"))
+		return;
+	}
 	
 	UE_LOG(LogTemp, Error, TEXT("Repulsion"));
 	
@@ -277,11 +312,15 @@ void AActionPlane::RepulsionBeginOverlap(UPrimitiveComponent* OverlappedComponen
 		//반발 시, 뽑아낸 것 만큼 감쇠하고, 반사하기에 2배
 		FVector reflect = GetActorForwardVector() * dot * 2.f;
 		//기존 이동 속도에 합산.
-		reflect += targetInfo.targetVelocity;
+		reflect += incidence;
 		//속도 갱신
 		targetInfo.targetVelocity = reflect;
 		//반발하니 반발여부 체크.
 		bReflection = true;
+		
+		UE_LOG(LogTemp, Error, TEXT("%f"), reflect.X);
+		UE_LOG(LogTemp, Error, TEXT("%f"), reflect.Y);
+		UE_LOG(LogTemp, Error, TEXT("%f"), reflect.Z);
 	}
 
 	targetInfo.targetJumpPower *= 2;
@@ -296,6 +335,18 @@ void AActionPlane::RepulsionEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (nullptr == target)
 		return;
 
+	target->DecrementEffectCount(GelEffectType::JumpUp);
+	int effectCount = target->GetEffectCount(GelEffectType::JumpUp);
+	if (effectCount > 0)
+	{
+		return;
+	}
+	if (effectCount < 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error!!!!! Invalid Count!"))
+		return;
+	}
+	
 	UE_LOG(LogTemp, Error, TEXT("RepulsionEnd"));
 	UE_LOG(LogTemp, Error, TEXT("%s"), *OtherActor->GetName());
 	

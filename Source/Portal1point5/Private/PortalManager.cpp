@@ -35,7 +35,19 @@ APortalManager::APortalManager()
 	{
 		
 	}
-	
+
+	ConstructorHelpers::FObjectFinder<UMaterial> bBorder(TEXT("/Script/Engine.Material'/Game/Portal1point5/Materials/M_BluePortalBorder.M_BluePortalBorder'"));
+	ConstructorHelpers::FObjectFinder<UMaterial> oBorder(TEXT("/Script/Engine.Material'/Game/Portal1point5/Materials/M_OrangePortalBorder.M_OrangePortalBorder'"));
+
+	if (bBorder.Succeeded() && oBorder.Succeeded())
+	{
+		BluePortalBorderMaterial = bBorder.Object;
+		OrangePortalBorderMaterial = oBorder.Object;
+	}
+	else
+	{
+		
+	}
 	
 }
 
@@ -171,8 +183,8 @@ void APortalManager::SetManagedCamera(class UCameraComponent* managedCamera)
 
 void APortalManager::SetPortal()
 {
-	OrangePortal->SetPortal(OrangeRenderTarget, BluePortal);
-	BluePortal->SetPortal(BlueRenderTarget, OrangePortal);
+	OrangePortal->SetPortal(OrangeRenderTarget, BluePortal, OrangePortalBorderMaterial);
+	BluePortal->SetPortal(BlueRenderTarget, OrangePortal, BluePortalBorderMaterial);
 }
 
 void APortalManager::SetVirtualCamera()

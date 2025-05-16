@@ -46,6 +46,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UTextureRenderTarget2D* BlueRenderTarget;
 	
+	UPROPERTY(VisibleAnywhere)
+	class UMaterial* OrangePortalBorderMaterial;
+	UPROPERTY(VisibleAnywhere)
+	class UMaterial* BluePortalBorderMaterial;
 	
 	//함수
 private:

@@ -16,4 +16,5 @@ class PORTAL1POINT5_API UGelProjectileMovementComponent : public UProjectileMove
 
 protected:
 	virtual void HandleImpact(const FHitResult& Hit, float TimeSlice = 0, const FVector& MoveDelta = FVector::ZeroVector) override;
+	virtual bool HandleDeflection(FHitResult& Hit, const FVector& OldVelocity, const uint32 NumBounces, float& SubTickTimeRemaining) override;
 };
