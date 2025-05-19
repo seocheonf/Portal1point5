@@ -212,6 +212,12 @@ void APortalManager::PutBluePortal(const AActor* instigator, const FVector& star
 	PutPortal(BluePortal, instigator, startPoint, direction);
 }
 
+void APortalManager::SetPortalsLocation(FVector location)
+{
+	OrangePortal->SetActorLocation(location);
+	BluePortal->SetActorLocation(location);
+}
+
 
 
 

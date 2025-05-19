@@ -66,4 +66,9 @@ public:
 
 	void PutOrangePortal(const AActor* instigator, const FVector& startPoint, const FVector& direction);
 	void PutBluePortal(const AActor* instigator, const FVector& startPoint, const FVector& direction);
+
+	//블루프린트 콜러블 함수
+public:
+	UFUNCTION(BlueprintCallable, Category = "Portal")
+	void SetPortalsLocation(FVector location);
 };
