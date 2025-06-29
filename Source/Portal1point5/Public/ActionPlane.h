@@ -39,6 +39,7 @@ private:
 	//..?? 바로 밑의 변수 때문에 딱히 쓰지 않을 듯.
 	GelStatus PlaneGel;
 	//런타임 상태
+	UPROPERTY(VisibleAnywhere)
 	PlaneStatus PlaneState;
 
 	UPROPERTY(EditAnywhere)

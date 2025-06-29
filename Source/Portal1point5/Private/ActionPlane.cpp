@@ -100,6 +100,21 @@ void AActionPlane::ConstructionInitComponent()
 
 void AActionPlane::CustomBeginPlay()
 {
+	switch (DefaultPlaneState)
+	{
+	case PlaneStatus::Default:
+		PlaneGel = GelStatus::Cleaning;
+		break;
+	case PlaneStatus::Conversion:
+		PlaneGel = GelStatus::Conversion;
+		break;
+	case PlaneStatus::Repulsion:
+		PlaneGel = GelStatus::Repulsion;
+		break;
+	case PlaneStatus::Propulsion:
+		PlaneGel = GelStatus::Propulsion;
+		break;
+	}
 	SetState(DefaultPlaneState, true);
 }
 
